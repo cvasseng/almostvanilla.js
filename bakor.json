@@ -1,0 +1,14 @@
+{
+  "name": "av",
+  "outputDir": "./build",
+  "dependencies":[],
+  "js":[
+    "src/av.js",
+    "src/av.events.js",
+    "src/av.mover.js",
+    "src/av.resizer.js",
+    "src/av.dnd.js"
+  ],
+  "css":[],
+  "less":[]
+}
