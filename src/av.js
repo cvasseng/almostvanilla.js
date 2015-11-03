@@ -57,6 +57,21 @@ var av = {
     return n;
   },
   
+  //Selector
+  sel: function (target, st) {
+    if (target && target.querySelector) {
+      return target.querySelector(st);
+    }
+  },
+  
+  //Get a node by id
+  byid: function (node) {
+    if (!av.isBasic(node) && node.appendChild) {
+      return node;
+    }
+    return document.getElementById(node);
+  },
+  
   //Style one or more DOM nodes
   style: function (node, st) {
     if (node.forEach) {
@@ -75,12 +90,22 @@ var av = {
   
   //Attach a listener to one or more DOM nodes
   on: function (target, event, func, ctx) {
-   var s = [];
+    var s = [];
+    
+    if (target === document.body && event === 'resize') {
+      //Need some special magic here.
+      // s.push(av.on(target, event, function () {
+        
+      // }));
+    }
     
     if (target && target.forEach) {
       target.forEach(function (t) {
         s.push(av.on(t, event, func));
       });
+    }
+    
+    if (s.length > 0) {
       return function () {
         s.forEach(function (f) {
           f();
@@ -144,6 +169,11 @@ var av = {
     return a;
   },
   
+  //Copy an object
+  copy: function (obj) {
+    return av.merge({}, obj);
+  },
+  
   //Return the size of a node
   size: function (node) {
     return {
@@ -152,6 +182,7 @@ var av = {
     }
   },
   
+  //Return the position of a node
   pos: function (node) {
     return {
       x: node.offsetLeft,
@@ -159,20 +190,22 @@ var av = {
     }
   },
   
+  //Return true if what is null or undefined
   isNull: function (what) {
     return (typeof what === 'undefined' || what == null);
   },
   
+  //Returns true if what is a string
   isStr: function (what) {
     return (typeof what === 'string' || what instanceof String);
   },
   
-  // Returns true if what is a number
+  //Returns true if what is a number
   isNum: function(what) {
     return !isNaN(parseFloat(what)) && isFinite(what);
   },
   
-  // Returns true if what is a function
+  //Returns true if what is a function
   isFn: function (what) {
     return (what && (typeof what === 'function') || (what instanceof Function));
   },
@@ -192,3 +225,24 @@ var av = {
     return !av.isArr(what) && (av.isStr(what) || av.isNum(what) || av.isBool(what) || av.isFn(what));
   }
 };
+
+
+(function () {
+  var readyFn = [],
+      initied = false
+  ;
+  
+  av.ready = function (fn) {
+    if (initied) {
+      return fn();
+    }
+    readyFn.push(fn);
+  };
+  
+  av.init = function () {
+    readyFn.forEach(function (fn) {
+      fn();
+    });
+    initied = true;
+  }
+})();

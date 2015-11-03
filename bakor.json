@@ -5,8 +5,11 @@
   "js":[
     "src/av.js",
     "src/av.events.js",
+    "src/av.hotkeys.js",
+    "src/av.ajax.js",
     "src/av.mover.js",
     "src/av.resizer.js",
+    "src/av.uploadget.js",
     "src/av.dnd.js"
   ],
   "css":[],
