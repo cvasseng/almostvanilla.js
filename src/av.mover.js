@@ -36,8 +36,8 @@ SOFTWARE.
       snap = 1
   ;
 
-  if (!handle) {
-    handle = target;
+  if (av.isNull(target)) {
+    target = handle;
   }
 
   function enable() {

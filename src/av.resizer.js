@@ -39,8 +39,8 @@ av.Resizer = function (handle, target, dir) {
       snap = 1
   ;
 
-  if (!handle) {
-    handle = target;
+  if (!target) {
+    target = handle;
   }
 
   function enable() {
