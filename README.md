@@ -18,6 +18,8 @@ This will produce a set of files in the `./build/` directory which can be includ
 
 ## API
   
+**Base Function**  
+  
   * `av.ap(target, ...)`: append one or more DOM nodes to the DOM node `target`
   * `av.cr(type, [cssClass], [value], [id])`: create and return a new DOM node
   * `av.style(node(s), styleObject)`: style a node. Node can be an array, in which case all nodes will be styled at once
@@ -38,22 +40,44 @@ This will produce a set of files in the `./build/` directory which can be includ
   * `av.events()`: returns an event dispatcther object
   * `av.ready(fn)`: add a function to be called when initializing the library
   * `av.init()`: initialize the library, should be called on document.body.onload normally
+  * `av.registerHotkey(key, [context], function)`: register a hotkey. Key is a string of keys, e.g. "META+S". Context is the context in which the hotkey is active. Function is the function to call when the key combination is entered.
+  * `av.sethotkeyContext(context)`: set the current hotkey context
   * `av.Mover(handle, target, axis)`: make a DOM node movable. Handle is the move handle, target is the node to move, and axis is the axis for which moving is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (`on(...)`) which can be used to listen to `Done`, `Moving`, and `Start` events.
   * `av.Resizer(handle, target, axis)`: make a DOM node resizable. Handle is the resize handle, target is the node to resize, and axis is the axis for which resizing is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (`on(...)`) which can be used to listen to `Done`, `Resizing`, and `Start` events.
-  * `av.ajax(properties)`: perform an ajax request. Returns an object:
-    * `on`: attach a listener to the ajax request
-    * `fire`: perform the request (when `properties.autoFire` is set to false, this allows for the preparation of a request without immediatly performing it. It also allows for easy re-firing)
-    * `request`: the `XMLHttpRequest` instance 
+  
+**Ajax** 
+  
+Ajax requests can be performed with `av.ajax(properties)`. The function returns an object with the following attributes:
+  * `on`: attach a listener to the ajax request
+  * `fire`: perform the request (when `properties.autoFire` is set to false, this allows for the preparation of a request without immediatly performing it. It also allows for easy re-firing)
+  * `request`: the `XMLHttpRequest` instance 
+  
+The properties argument is an object:
     
-    The properties argument is an object with the following attributes:
+    {
+      url: 'request url',
+      type: 'get|post|update|put',
+      dataType: 'json|xml|text|octet',
+      data: payload data,
+      success: function to call on success,
+      error: function to call on error,
+      autoFire: bool - set to true (default) to perform the request immediatly
+    }
     
-    * `url`: the request url
-    * `type`: the type of request (`GET POST PUT DELETE`) - default is `GET`
-    * `dataType`: the data type for the payload, and return (`json xml text octet`) - default is `json`
-    * `success`: function to call upon a sucessful request
-    * `error`: function to call upon an error 
-    * `data`: the payload
-    * `autoFire`: automatically perform the request immediatly - default is `true`
+**File Uploads**
+
+The file upload system uses `FileReader` to upload, and parse local files in your applications.
+
+It' used as such: `av.readLocalFile(properties)`, where properties is an object:
+    
+    {
+      type: json|text|b64|binary,
+      multiple: true|false,
+      progress: function (percent) - function to call when the upload progress updates,
+      success: function to call when the file has been uploded to the browser,
+      error: function to call on errors
+    }  
+  
   
 ##Quick Samples  
   
