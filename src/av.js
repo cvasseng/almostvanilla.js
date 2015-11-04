@@ -231,10 +231,10 @@ var av = {
   }
 };
 
-
 (function () {
   var readyFn = [],
-      initied = false
+      initied = false,
+      poller = 0
   ;
   
   av.ready = function (fn) {
@@ -250,4 +250,12 @@ var av = {
     });
     initied = true;
   }
+  
+  //Start polling for initialization
+  poller = setInterval(function () {
+    if (window && window.document && window.document.body) {
+      av.init();
+      clearInterval(poller);
+    }
+  }, 20);
 })();

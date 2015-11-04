@@ -17,10 +17,10 @@ This will produce a set of files in the `./build/` directory which can be includ
 # API Reference
   
 **Base Functions**  
-  * `av.merge(a, b)`: merge object `b` into object `a`. This is essentially a deep copy.
+  * `av.merge(a, b)`: merge object `b` into object `a`. Object `b` is in other words deep copied into object `a`.
   * `av.copy(obj)`: deep-copy an object and return the copy
   * `av.ready(fn)`: add a function to be called when initializing the library
-  * `av.init()`: initialize the library, should be called on document.body.onload normally
+  * `av.init()`: initialize the library. This is normally called automatically when the document is ready
   * `av.events()`: returns an event dispatcther object with the functions `on`, `emit`, and `clear`
     
 **DOM API**
@@ -81,7 +81,6 @@ It' used as such: `av.readLocalFile(properties)`, where properties is an object:
       success: function to call when the file has been uploded to the browser,
       error: function to call on errors
     }  
-  
   
 #Quick Samples  
   
