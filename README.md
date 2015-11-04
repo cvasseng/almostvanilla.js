@@ -35,7 +35,7 @@ Note that you need to build av for the samples in `samples/` to work.
   * `av.size(node)`: returns an object - `{w, h}` - containing the size of the supplied DOM node
   * `av.pos(node)`: returns an object -`{x, y}` - containing the position of the supplied DOM node
   * `av.sel([target], selector)`: query selector function. Target is the node to query. If left blank, `document.body` will be queried.
-  * `av.Mover(handle, target, axis)`: make a DOM node movable. Handle is the move handle, target is the node to move, and axis is the axis for which moving is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (`on(...)`) which can be used to listen to `Done`, `Moving`, and `Start` events.
+  * `av.Mover(handle, target, axis)`: make a DOM node movable. Handle is the move handle, target is the node to move, and axis is the axis for which moving is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (`on(...)`) which can be used to listen to `Done`, `Moving`, and `Start` events. **Important:** `body` and `html` must be set to `width: 100%; height: 100%` for the mouse events to work properly!
   * `av.Resizer(handle, target, axis)`: make a DOM node resizable. Handle is the resize handle, target is the node to resize, and axis is the axis for which resizing is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (`on(...)`) which can be used to listen to `Done`, `Resizing`, and `Start` events.
   
 **Type Checks**  
@@ -83,6 +83,26 @@ It' used as such: `av.readLocalFile(properties)`, where properties is an object:
       success: function to call when the file has been uploded to the browser,
       error: function to call on errors
     }  
+  
+**Drag 'n Drop**
+
+Drag and drop is handled with two different objects: 
+  * `av.Draggable(target, type, payload)`: target is a DOM node, type is a string with type identifiers for the drag operation separated by whitespace, and payload is the data attached to the drag operation.
+  * `av.DropTarget(target, types)`: target is a DOM node, types is a string with type identifiers separated by whitespace that the drop area accepts
+  
+`av.Draggable` makes a node draggable, while `av.DropTarget` turns a node into a drop target.
+
+Both functions return an object with a `on` function, which can be used to listen for the following events:
+
+Draggable events:
+  * `DragStart` - emitted when starting a drag operation
+  * `DragEnd` - emitted when completing a drag operation
+  
+Drop Target events:
+  * `DragEnter` - emitted when a draggable object enters the drop target
+  * `DragLeave` - emitted when a draggable object leaves the drop target
+  * `DragOver` - emitted when holding a draggable object over the drop target
+  * `Drop(payload, type, event)` - emitted when a draggable object is dropped on the target
   
 #Quick Samples  
   
