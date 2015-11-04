@@ -59,6 +59,11 @@ var av = {
   
   //Selector
   sel: function (target, st) {
+    if (!st) {
+      st = target;
+      target = document.body;
+    }
+    
     if (target && target.querySelector) {
       return target.querySelector(st);
     }

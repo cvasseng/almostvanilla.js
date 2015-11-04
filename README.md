@@ -1,10 +1,12 @@
 # almostvanilla.js
 
-**Very, very small (6kb minified) "library" that makes it easier to deal with events, real-time resizing/moving of nodes, the DOM, and drag 'n drop.**
+**Very, very small (<10kb minified) "library" that makes it easier to deal with events, real-time resizing/moving of nodes, the DOM, and drag 'n drop.**
+
+Almostvanilla.js is written for modern browsers, and as such does not support old versions of chrome/safari/firefox (as in >3 years old),
+nor IE 6/7/8.
 
 After months and months of copy-pasting this stuff everytime I started a new web-based project,
 I have finally pulled this out and made it into its own thing. Yay. It has served me very well as the foundation for web-apps.
-
 
 #Building
  
@@ -18,18 +20,27 @@ This will produce a set of files in the `./build/` directory which can be includ
 
 ## API
   
-**Base Function**  
-  
+**Base Functions**  
+  * `av.merge(a, b)`: merge object `b` into object `a`. This is essentially a deep copy.
+  * `av.copy(obj)`: deep-copy an object and return the copy
+  * `av.ready(fn)`: add a function to be called when initializing the library
+  * `av.init()`: initialize the library, should be called on document.body.onload normally
+  * `av.events()`: returns an event dispatcther object with the functions `on`, `emit`, and `clear`
+    
+**DOM API**
   * `av.ap(target, ...)`: append one or more DOM nodes to the DOM node `target`
   * `av.cr(type, [cssClass], [value], [id])`: create and return a new DOM node
   * `av.style(node(s), styleObject)`: style a node. Node can be an array, in which case all nodes will be styled at once
   * `av.byid(id)`: get a DOM node by id
   * `av.on(target(s), event, callback, [context]`: attach an event listener to a DOM node. Target can be an array of nodes.
   * `av.nodefault(event)`: use to cancel event propogation on the supplied DOM event handle
-  * `av.merge(a, b)`: merge object `b` into object `a`. This is essentially a deep copy.
-  * `av.copy(obj)`: deep-copy an object and return the copy
   * `av.size(node)`: returns an object - `{w, h}` - containing the size of the supplied DOM node
   * `av.pos(node)`: returns an object -`{x, y}` - containing the position of the supplied DOM node
+  * `av.sel([target], selector)`: query selector function. Target is the node to query. If left blank, `document.body` will be queried.
+  * `av.Mover(handle, target, axis)`: make a DOM node movable. Handle is the move handle, target is the node to move, and axis is the axis for which moving is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (`on(...)`) which can be used to listen to `Done`, `Moving`, and `Start` events.
+  * `av.Resizer(handle, target, axis)`: make a DOM node resizable. Handle is the resize handle, target is the node to resize, and axis is the axis for which resizing is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (`on(...)`) which can be used to listen to `Done`, `Resizing`, and `Start` events.
+  
+**Type Checks**  
   * `av.isNull(what)`: returns true if `what` is null or undefined
   * `av.isStr(what)`: returns true if `what` is a string
   * `av.isNum(what)`: returns true if `what` is a number
@@ -37,13 +48,10 @@ This will produce a set of files in the `./build/` directory which can be includ
   * `av.isArr(what)`: returns true if `what` is an array
   * `av.isBool(what)`: returns true if `what` is a boolean
   * `av.isBasic(what)`: returns true if `what` is a basic type (number, string, function) 
-  * `av.events()`: returns an event dispatcther object
-  * `av.ready(fn)`: add a function to be called when initializing the library
-  * `av.init()`: initialize the library, should be called on document.body.onload normally
+  
+**Hotkey System**  
   * `av.registerHotkey(key, [context], function)`: register a hotkey. Key is a string of keys, e.g. "META+S". Context is the context in which the hotkey is active. Function is the function to call when the key combination is entered.
   * `av.sethotkeyContext(context)`: set the current hotkey context
-  * `av.Mover(handle, target, axis)`: make a DOM node movable. Handle is the move handle, target is the node to move, and axis is the axis for which moving is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (`on(...)`) which can be used to listen to `Done`, `Moving`, and `Start` events.
-  * `av.Resizer(handle, target, axis)`: make a DOM node resizable. Handle is the resize handle, target is the node to resize, and axis is the axis for which resizing is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (`on(...)`) which can be used to listen to `Done`, `Resizing`, and `Start` events.
   
 **Ajax** 
   
