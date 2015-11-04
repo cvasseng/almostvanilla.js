@@ -3,10 +3,8 @@
 **Very, very small (<10kb minified) "library" that makes it easier to deal with events, real-time resizing/moving of nodes, the DOM, and drag 'n drop.**
 
 Almostvanilla.js is written for modern browsers, and as such does not support old versions of chrome/safari/firefox (as in >3 years old),
-nor IE 6/7/8.
-
-After months and months of copy-pasting this stuff everytime I started a new web-based project,
-I have finally pulled this out and made it into its own thing. Yay. It has served me very well as the foundation for web-apps.
+nor IE 6/7/8. It is written in a functional manner with no prototype based inheritence. Everything is contained within a single global namespace - `av` - and there is no
+augmentation of built-in objects. 
 
 #Building
  
@@ -16,9 +14,7 @@ Once installed, build by running `bakor` in the project root directory.
 
 This will produce a set of files in the `./build/` directory which can be included in your application.
  
-#API Reference & Usage
-
-## API
+# API Reference
   
 **Base Functions**  
   * `av.merge(a, b)`: merge object `b` into object `a`. This is essentially a deep copy.
@@ -87,7 +83,7 @@ It' used as such: `av.readLocalFile(properties)`, where properties is an object:
     }  
   
   
-##Quick Samples  
+#Quick Samples  
   
 Example: creating a DIV and appending it to `document.body`:
     
@@ -150,6 +146,18 @@ Example: create a resizable DIV:
     var node = av.cr('div', '', 'Resize me!'); 
     av.Resizer(node);
     av.ap(document.body, node);
+    
+Example: get a file from the user, upload it to the browser, and output the data:
+
+    av.readLocalFile({
+      type: 'text',
+      success: function (data) {
+        av.ap(document.body,
+          av.cr('div', '', 'Uploaded file ' + data.filename + ' (' + data.size + ' bytes)'),
+          av.cr('pre', '', data.data)
+        );  
+      }  
+    });
 
 # License
 
