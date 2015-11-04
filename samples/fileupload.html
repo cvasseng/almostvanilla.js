@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>Almostvanilla.js</title>
+     <script type="text/javascript" src="../build/av.js"></script>    
+  </head>
+  
+  <body>
+    <button id="upload">Upload File</button>
+  </body>
+  
+  <script>
+    av.on(av.byid('upload'), 'click', function () {
+      av.readLocalFile({
+        type: 'text',
+        success: function (data) {
+          av.ap(document.body,
+            av.cr('h3', '', 'Uploaded file ' + data.filename + ' (' + data.size + ' bytes)'),
+            av.cr('pre', '', data.data)
+          );  
+        }  
+      });   
+    }); 
+  </script>
+
+</html>

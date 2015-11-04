@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>Almostvanilla.js</title>
+     <script type="text/javascript" src="../build/av.js"></script>    
+  
+  <style>
+    html, body {
+      width:100%;
+      height:100%;
+    }
+    
+    .sizable {
+      cursor:resize;
+      padding:2px;
+      background:#F5F5F5;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      min-width:100px;
+      min-height:20px;
+      text-align: center;
+    }
+  </style>
+  
+  </head>
+  
+  <body>
+  </body>
+  
+  <script>
+    var node = av.cr('div', 'sizable', 'Resize me!');       
+    av.Resizer(node);    
+    av.ap(document.body, node);    
+  </script>
+
+</html>
