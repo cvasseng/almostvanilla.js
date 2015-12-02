@@ -15,6 +15,8 @@ Once installed, build by running `bakor` in the project root directory.
 This will produce a set of files in the `./build/` directory which can be included in your application.
  
 Note that you need to build av for the samples in `samples/` to work. 
+
+**You can also download pre-built stable versions [here](https://github.com/cvasseng/almostvanilla.js/releases)** 
  
 # API Reference
   
