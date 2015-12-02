@@ -3,8 +3,8 @@
 **Very, very small (<10kb minified) "library" that makes it easier to deal with events, real-time resizing/moving of nodes, the DOM, and drag 'n drop.**
 
 Almostvanilla.js is written for modern browsers, and as such does not support old versions of chrome/safari/firefox (as in >3 years old),
-nor IE 6/7/8. It is written in a functional manner with no prototype based inheritence. Everything is contained within a single global namespace - `av` - and there is no
-augmentation of built-in objects. 
+nor IE 6/7/8. It is written in a functional manner with no prototype-based classes/objects. Everything is contained within a single global namespace - `av` - and there is no
+augmentation of built-in objects. It does not offer any high-level UI functionality (e.g. widgets).
 
 #Building
  
@@ -45,7 +45,7 @@ Note that you need to build av for the samples in `samples/` to work.
   * `av.isFn(what)`: returns true if `what` is a function
   * `av.isArr(what)`: returns true if `what` is an array
   * `av.isBool(what)`: returns true if `what` is a boolean
-  * `av.isBasic(what)`: returns true if `what` is a basic type (number, string, function) 
+  * `av.isBasic(what)`: returns true if `what` is a basic type (number, string, function, bool) 
   
 **Hotkey System**  
   * `av.registerHotkey(key, [context], function)`: register a hotkey. Key is a string of keys, e.g. "META+S". Context is the context in which the hotkey is active. Function is the function to call when the key combination is entered.
@@ -154,9 +154,18 @@ Example: creating an event listener:
     
 Example: create a Movable DIV:
     
-    .movable {
-      position: absoulte;
+    CSS:
+    
+    html, body {
+      width: 100%;
+      height: 100%;  
     }
+    
+    .movable {
+      position: absolute;
+    }
+    
+    JavaScript:
     
     var node = av.cr('div', 'movable', 'Move me!');   
     av.Mover(node);

@@ -84,7 +84,6 @@ SOFTWARE.
     });
 
     mover = av.on(document.body, 'mousemove', function (e) {
-      console.log('moving! ' + moving);
       if (moving) {
 
         if (!axis || axis === 'X' || axis === 'XY') {
