@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Almostvanilla.js by cvasseng</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Almostvanilla.js</h1>
+      <h2 class="project-tagline">Tiny tiny JavaScript lib</h2>
+      <a href="https://github.com/cvasseng/almostvanilla.js" class="btn">View on GitHub</a>
+      <a href="https://github.com/cvasseng/almostvanilla.js/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/cvasseng/almostvanilla.js/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="almostvanillajs" class="anchor" href="#almostvanillajs" aria-hidden="true"><span class="octicon octicon-link"></span></a>almostvanilla.js</h1>
+
+<p><strong>Very, very small (&lt;10kb minified) "library" that makes it easier to deal with events, real-time resizing/moving of nodes, the DOM, and drag 'n drop.</strong></p>
+
+<p>Almostvanilla.js is written for modern browsers, and as such does not support old versions of chrome/safari/firefox (as in &gt;3 years old),
+nor IE 6/7/8. It is written in a functional manner with no prototype-based classes/objects. Everything is contained within a single global namespace - <code>av</code> - and there is no
+augmentation of built-in objects. It does not offer any high-level UI functionality (e.g. widgets).</p>
+
+<h1>
+<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h1>
+
+<p>To build almostvanilla.js, you need <a href="https://github.com/iqumulus/bakor/">bakor</a> installed. Bakor is a node module, 
+and must be installed globally, i.e. <code>npm install -g bakor</code>.
+Once installed, build by running <code>bakor</code> in the project root directory.</p>
+
+<p>This will produce a set of files in the <code>./build/</code> directory which can be included in your application.</p>
+
+<p>Note that you need to build av for the samples in <code>samples/</code> to work. </p>
+
+<p><strong>You can also download pre-built stable versions <a href="https://github.com/cvasseng/almostvanilla.js/releases">here</a></strong> </p>
+
+<h1>
+<a id="api-reference" class="anchor" href="#api-reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>API Reference</h1>
+
+<p><strong>Base Functions</strong>  </p>
+
+<ul>
+<li>
+<code>av.merge(a, b)</code>: merge object <code>b</code> into object <code>a</code>. Object <code>b</code> is in other words deep copied into object <code>a</code>.</li>
+<li>
+<code>av.copy(obj)</code>: deep-copy an object and return the copy</li>
+<li>
+<code>av.ready(fn)</code>: add a function to be called when initializing the library</li>
+<li>
+<code>av.init()</code>: initialize the library. This is normally called automatically when the document is ready</li>
+<li>
+<code>av.events()</code>: returns an event dispatcther object with the functions <code>on</code>, <code>emit</code>, and <code>clear</code>
+</li>
+</ul>
+
+<p><strong>DOM API</strong></p>
+
+<ul>
+<li>
+<code>av.ap(target, ...)</code>: append one or more DOM nodes to the DOM node <code>target</code>
+</li>
+<li>
+<code>av.cr(type, [cssClass], [value], [id])</code>: create and return a new DOM node</li>
+<li>
+<code>av.style(node(s), styleObject)</code>: style a node. Node can be an array, in which case all nodes will be styled at once</li>
+<li>
+<code>av.byid(id)</code>: get a DOM node by id</li>
+<li>
+<code>av.on(target(s), event, callback, [context]</code>: attach an event listener to a DOM node. Target can be an array of nodes.</li>
+<li>
+<code>av.nodefault(event)</code>: use to cancel event propogation on the supplied DOM event handle</li>
+<li>
+<code>av.size(node)</code>: returns an object - <code>{w, h}</code> - containing the size of the supplied DOM node</li>
+<li>
+<code>av.pos(node)</code>: returns an object -<code>{x, y}</code> - containing the position of the supplied DOM node</li>
+<li>
+<code>av.sel([target], selector)</code>: query selector function. Target is the node to query. If left blank, <code>document.body</code> will be queried.</li>
+<li>
+<code>av.Mover(handle, target, axis)</code>: make a DOM node movable. Handle is the move handle, target is the node to move, and axis is the axis for which moving is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (<code>on(...)</code>) which can be used to listen to <code>Done</code>, <code>Moving</code>, and <code>Start</code> events. <strong>Important:</strong> <code>body</code> and <code>html</code> must be set to <code>width: 100%; height: 100%</code> for the mouse events to work properly!</li>
+<li>
+<code>av.Resizer(handle, target, axis)</code>: make a DOM node resizable. Handle is the resize handle, target is the node to resize, and axis is the axis for which resizing is allowed ('X', 'Y', or 'XY'). The returned object has an event emitter (<code>on(...)</code>) which can be used to listen to <code>Done</code>, <code>Resizing</code>, and <code>Start</code> events.</li>
+</ul>
+
+<p><strong>Type Checks</strong>  </p>
+
+<ul>
+<li>
+<code>av.isNull(what)</code>: returns true if <code>what</code> is null or undefined</li>
+<li>
+<code>av.isStr(what)</code>: returns true if <code>what</code> is a string</li>
+<li>
+<code>av.isNum(what)</code>: returns true if <code>what</code> is a number</li>
+<li>
+<code>av.isFn(what)</code>: returns true if <code>what</code> is a function</li>
+<li>
+<code>av.isArr(what)</code>: returns true if <code>what</code> is an array</li>
+<li>
+<code>av.isBool(what)</code>: returns true if <code>what</code> is a boolean</li>
+<li>
+<code>av.isBasic(what)</code>: returns true if <code>what</code> is a basic type (number, string, function, bool) </li>
+</ul>
+
+<p><strong>Hotkey System</strong>  </p>
+
+<ul>
+<li>
+<code>av.registerHotkey(key, [context], function)</code>: register a hotkey. Key is a string of keys, e.g. "META+S". Context is the context in which the hotkey is active. Function is the function to call when the key combination is entered.</li>
+<li>
+<code>av.sethotkeyContext(context)</code>: set the current hotkey context</li>
+</ul>
+
+<p><strong>Ajax</strong> </p>
+
+<p>Ajax requests can be performed with <code>av.ajax(properties)</code>. The function returns an object with the following attributes:</p>
+
+<ul>
+<li>
+<code>on</code>: attach a listener to the ajax request</li>
+<li>
+<code>fire</code>: perform the request (when <code>properties.autoFire</code> is set to false, this allows for the preparation of a request without immediatly performing it. It also allows for easy re-firing)</li>
+<li>
+<code>request</code>: the <code>XMLHttpRequest</code> instance </li>
+</ul>
+
+<p>The properties argument is an object:</p>
+
+<pre><code>{
+  url: 'request url',
+  type: 'get|post|update|put',
+  dataType: 'json|xml|text|octet',
+  data: payload data,
+  success: function to call on success,
+  error: function to call on error,
+  autoFire: bool - set to true (default) to perform the request immediatly
+}
+</code></pre>
+
+<p><strong>File Uploads</strong></p>
+
+<p>The file upload system uses <code>FileReader</code> to upload, and parse local files in your applications.</p>
+
+<p>It' used as such: <code>av.readLocalFile(properties)</code>, where properties is an object:</p>
+
+<pre><code>{
+  type: json|text|b64|binary,
+  multiple: true|false,
+  progress: function (percent) - function to call when the upload progress updates,
+  success: function to call when the file has been uploded to the browser,
+  error: function to call on errors
+}  
+</code></pre>
+
+<p><strong>Drag 'n Drop</strong></p>
+
+<p>Drag and drop is handled with two different objects: </p>
+
+<ul>
+<li>
+<code>av.Draggable(target, type, payload)</code>: target is a DOM node, type is a string with type identifiers for the drag operation separated by whitespace, and payload is the data attached to the drag operation.</li>
+<li>
+<code>av.DropTarget(target, types)</code>: target is a DOM node, types is a string with type identifiers separated by whitespace that the drop area accepts</li>
+</ul>
+
+<p><code>av.Draggable</code> makes a node draggable, while <code>av.DropTarget</code> turns a node into a drop target.</p>
+
+<p>Both functions return an object with a <code>on</code> function, which can be used to listen for the following events:</p>
+
+<p>Draggable events:</p>
+
+<ul>
+<li>
+<code>DragStart</code> - emitted when starting a drag operation</li>
+<li>
+<code>DragEnd</code> - emitted when completing a drag operation</li>
+</ul>
+
+<p>Drop Target events:</p>
+
+<ul>
+<li>
+<code>DragEnter</code> - emitted when a draggable object enters the drop target</li>
+<li>
+<code>DragLeave</code> - emitted when a draggable object leaves the drop target</li>
+<li>
+<code>DragOver</code> - emitted when holding a draggable object over the drop target</li>
+<li>
+<code>Drop(payload, type, event)</code> - emitted when a draggable object is dropped on the target</li>
+</ul>
+
+<h1>
+<a id="quick-samples" class="anchor" href="#quick-samples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick Samples</h1>
+
+<p>Example: creating a DIV and appending it to <code>document.body</code>:</p>
+
+<pre><code>av.ap(document.body, av.cr('div', 'myclass', 'Hello world!'));    
+</code></pre>
+
+<p>Example: styling a DOM node:</p>
+
+<pre><code>av.style(myDOMNode, {
+  color: '#FFF',
+  fontSize: '10px'
+});
+</code></pre>
+
+<p>Example: attaching an event listener to <code>document.body</code>:</p>
+
+<pre><code>var cancelEvent = av.on(document.body, 'click', function (e) {
+  ...
+});
+
+//cancelEvent is now a function that can be called to detach the listener
+</code></pre>
+
+<p>Example: creating an event listener:</p>
+
+<pre><code>//Create an object with an event listener in it
+function MyObject() {
+  var events = av.events();
+
+  function sayHello() {
+    events.emit('Hello');
+  }
+
+  return {
+    sayHello: sayHello,
+    on: events.on
+  }
+}
+
+//Instance the object
+var foobar = MyObject();
+
+//Attach an event listener
+foobar.on('Hello', function () {
+  console.log('foobar emitted Hello!');
+});
+
+//Call the hello function, which will emit the event and trigger the above handler
+foobar.sayHello();
+</code></pre>
+
+<p>Example: create a Movable DIV:</p>
+
+<pre><code>CSS:
+
+html, body {
+  width: 100%;
+  height: 100%;  
+}
+
+.movable {
+  position: absolute;
+}
+
+JavaScript:
+
+var node = av.cr('div', 'movable', 'Move me!');   
+av.Mover(node);
+av.ap(document.body, node);
+</code></pre>
+
+<p>Example: create a resizable DIV:</p>
+
+<pre><code>var node = av.cr('div', '', 'Resize me!'); 
+av.Resizer(node);
+av.ap(document.body, node);
+</code></pre>
+
+<p>Example: get a file from the user, upload it to the browser, and output the data:</p>
+
+<pre><code>av.readLocalFile({
+  type: 'text',
+  success: function (data) {
+    av.ap(document.body,
+      av.cr('div', '', 'Uploaded file ' + data.filename + ' (' + data.size + ' bytes)'),
+      av.cr('pre', '', data.data)
+    );  
+  }  
+});
+</code></pre>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h1>
+
+<p>MIT. See LICENSE.md for details.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/cvasseng/almostvanilla.js">Almostvanilla.js</a> is maintained by <a href="https://github.com/cvasseng">cvasseng</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-70966670-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
