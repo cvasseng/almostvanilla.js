@@ -233,29 +233,40 @@ var av = {
 
 (function () {
   var readyFn = [],
-      initied = false,
+      inited = false,
       poller = 0
   ;
   
+  console.log('main closure');
+  
   av.ready = function (fn) {
-    if (initied) {
+    if (inited) {
+      console.log("already initied, calling function directly");
       return fn();
+    } else {
+      readyFn.push(fn);
+      console.log("function added to buffer - init state false");
     }
-    readyFn.push(fn);
   };
   
-  av.init = function () {
-    readyFn.forEach(function (fn) {
-      fn();
-    });
-    initied = true;
+  function init() {
+    if (window && window.document && window.document.body && !inited) {
+      console.log("Doing av.init");
+      readyFn = readyFn.filter(function (fn) {
+        fn(); return false;
+      });
+      inited = true;
+      return true;
+    }
+    return false;
   }
   
   //Start polling for initialization
   poller = setInterval(function () {
-    if (window && window.document && window.document.body) {
-      av.init();
-      clearInterval(poller);
+    if (window && window.document && window.document.body && !inited) {
+      if (init()) {
+        clearInterval(poller);        
+      }
     }
-  }, 20);
+  }, 200);
 })();
