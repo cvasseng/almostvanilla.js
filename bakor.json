@@ -5,6 +5,7 @@
   "js":[
     "src/av.js",
     "src/av.events.js",
+    "src/av.electron.js",
     "src/av.hotkeys.js",
     "src/av.ajax.js",
     "src/av.mover.js",
