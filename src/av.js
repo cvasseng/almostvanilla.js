@@ -228,40 +228,132 @@ var av = {
   //Returns true if what is a basic type 
   isBasic: function (what) {
     return !av.isArr(what) && (av.isStr(what) || av.isNum(what) || av.isBool(what) || av.isFn(what));
+  },
+
+  /* Parses a markup-like expression in a string
+   *
+   * e.g. matchAndReplaceWithin('[[test]]', '[[', ']]', false, fn)
+   * will call fn with [test] as its argument.
+   * [[test]] in the string will then be replaced by 
+   * the return value from fn.
+   *
+   * @str is the string to parse
+   * @lDel is the left side delimiter 
+   * @rDel is the right side delimiter
+   * @splitter is the delimiter between lDel and rDel
+   * @fn is the function to call on match
+   *
+   * @returns the processed string
+   */
+  matchAndReplaceWithin: function(str, lDel, rDel, splitter, fn) {
+    var l = lDel ? lDel.split('') : ['[', '['], 
+        r = rDel ? rDel.split('') : [']', ']'],
+        sp = splitter || '|',
+        prop = '',
+        inside = false,
+        hit = false,
+        res = '',
+        cname = 'link'
+    ;
+
+    function check(a, from) {      
+      for (var j = from; j < from + a.length; j++) {
+        if (str[j] != a[j - from]) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    for (var i = 0; i < str.length; i++) {
+      if (inside) {
+        if (check(r, i)) {
+          //We reached the end.
+          prop = prop.split(sp);
+
+          if (av.isFn(fn)) {
+            res += fn(prop);
+          } 
+          
+          i += l.length - 1;
+          inside = false;
+        } else {
+          prop += str[i];
+        }
+      } else if (check(l, i)) {
+        prop = '';
+        i += l.length - 1;
+        inside = true;
+      } else {
+        res += str[i];
+      }
+    }
+    return res;
+  },
+
+  //Return a timestamp string
+  timestamp: function () {
+    var d = new Date();
+    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
   }
 };
 
+//Stateful functions
 (function () {
   var readyFn = [],
       inited = false,
-      poller = 0
-  ;
-  
-  console.log('main closure');
+      poller = 0,
+      logLevel = 4,
+      logLevels = [
+        'error',
+        'warning',
+        'notice',
+        'silly',
+        'insane'
+      ] 
+  ;    
+
+  av.setLogLevel = function (nlevel) {
+    if (nlevel >= 0 && nlevel <= logLevel.length) {
+      logLevel = nlevel - 1;
+    }
+  }
+
+  av.log = function (level) {   
+    if (level <= logLevel && level > 0) {
+      var args = Array.prototype.splice(arguments);
+      args.slice(0, 1);
+      console.log([av.timestamp(), '[almostvanilla]', logLevels[level - 1], '-'].concat(args));      
+    }
+  }
   
   av.ready = function (fn) {
     if (inited) {
-      console.log("already initied, calling function directly");
-      return fn();
+      if (av.isFn(fn)) {
+        return fn();        
+      }
     } else {
       readyFn.push(fn);
-      console.log("function added to buffer - init state false");
     }
   };
   
   function init() {
     if (window && window.document && window.document.body && !inited) {
-      console.log("Doing av.init");
-      readyFn = readyFn.filter(function (fn) {
-        fn(); return false;
-      });
+      console.log("[almostvanilla] Initializing..");
       inited = true;
+      readyFn = readyFn.filter(function (fn) {
+        if (av.isFn(fn)) {
+          fn(); 
+        }
+        return false;          
+      });
+
       return true;
     }
     return false;
   }
   
-  //Start polling for initialization
+  //Start polling for initialization - not ideal, but proved most stable after multiple tests.
   poller = setInterval(function () {
     if (window && window.document && window.document.body && !inited) {
       if (init()) {

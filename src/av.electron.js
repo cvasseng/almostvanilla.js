@@ -31,9 +31,15 @@ SOFTWARE.
     return;
   }
 
-  var ipc = require('ipc-renderer'),
+  var ipc,
       events = av.events()
   ;
+
+  try {
+     ipc = require('ipc-renderer');
+  } catch (e) {
+    ipc = require('electron').ipcRenderer;
+  }
 
   av.electron = av.ectron || {};
 

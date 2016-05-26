@@ -26,6 +26,12 @@ Note that you need to build av for the samples in `samples/` to work.
   * `av.ready(fn)`: add a function to be called when initializing the library
   * `av.init()`: initialize the library. This is normally called automatically when the document is ready
   * `av.events()`: returns an event dispatcther object with the functions `on`, `emit`, and `clear`
+  * `av.timestamp()`: returns a timestamp in `date hh:mm` format
+  * `av.log(loglevel)`: log something. `logLevel` is a number from 1 to 5. The mapping is: `1=error, 2=warning, 3=notice, 4=silly, 5=silly`.
+  * `av.setLogLevel(logLevel)`: sets the current log level. Set to 0 to disable logging. 
+
+**Parsers**
+  * `av.matchAndReplaceWithin(str, leftDelimiter, rightDelimiter, splitter, fn)`: matches text within two defined delimiters - the right side, and the left side. Ideal for extracting (and optionally replacing) e.g. `[[some token]]`, or `[[some token|some subtoken]]`.
     
 **DOM API**
   * `av.ap(target, ...)`: append one or more DOM nodes to the DOM node `target`
@@ -106,6 +112,13 @@ Drop Target events:
   * `DragOver` - emitted when holding a draggable object over the drop target
   * `Drop(payload, type, event)` - emitted when a draggable object is dropped on the target
   
+**Electron**
+
+If you're running your stuff in electron, you can use the `av.electron.ipc` object to send/receive ipc messages to/from your node process.
+
+  * `av.electron.ipc.emit(message, arg1, arg2, ...)`: send an async message to the node process
+  * `av.electron.ipc.on(message, fn)`: handle an incoming async message from the node process
+
 #Quick Samples  
   
 Example: creating a DIV and appending it to `document.body`:
