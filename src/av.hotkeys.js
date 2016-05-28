@@ -30,10 +30,32 @@ SOFTWARE.
 
 
 (function () {
-      
-  var defContext = 'default',
-      currentContext = defContext
+  var 
+      hotkeys = [],
+      currentContext = false
   ;
+
+  av.ready(function () {
+    av.on(document.body, 'keydown', function (e) {
+      var hit = false;
+
+      hotkeys.forEach(function (option) {
+        if (option.ctrlKey && !e.ctrlKey) return;
+        if (option.shiftKey && !e.shiftKey) return;
+        if (option.metaKey && (!e.metaKey && !e.ctrlKey)) return;
+        if (option.altKey && !e.altKey) return;
+        if (option.key !== String.fromCharCode(e.keyCode).toUpperCase()) return;
+        if (option.context && option.context !== currentContext) return;
+        if (av.isFn(option.fn) && option.fn) {
+          option.fn();
+          hit = true;
+        }
+      });
+      if (hit) {
+        return av.nodefault(e);
+      }
+    });
+  });
 
   //Key format should be:
   /*
@@ -43,8 +65,6 @@ SOFTWARE.
      ALT+CTRL+A
      F5   
      etc.
-     
-     Returns a function that unbinds the hotkey.
   */
   av.registerHotkey = function (key, context, fn) {
     var pa = key.toUpperCase().split('+'),
@@ -53,42 +73,30 @@ SOFTWARE.
 
     if (!fn) {
       fn = context;
-      context = defContext;
+      context = false;
     }
 
     obj.fn = fn;
-    
+    obj.context = context;
+
     pa.forEach(function (item) {
-      if (item === 'CTRL' || item === '{CTRL}') {
+      if (item === 'CTRL') {
         obj.ctrlKey = true;
-      } else if (item === 'SHIFT' || item === '{SHIFT}') {
+      } else if (item === 'SHIFT') {
         obj.shiftKey = true;
-      } else if (item === 'META' || item === '{META}') {
+      } else if (item === 'META') {
         obj.metaKey = true;
-      } else if (item === 'ALT' || item === '{ALT}') {
+      } else if (item === 'ALT') {
         obj.altKey = true;
       } else  {
         obj.key = item;
       }
     });
-    
-    return av.on(document.body, 'keyup', function (e) {
-      if (context !== currentContext) return;
-      if (obj.ctrlKey && !e.ctrlKey)  return;
-      if (obj.shiftKey && !e.shiftKey) return;
-      if (obj.metaKey && (!e.metaKey && e.keyIdentifier != 'Meta')) return;
-      if (obj.altKey && !e.altKey)  return;
-      if (obj.key != String.fromCharCode(e.keyCode)) return;
-      
-      if (av.isFn(fn)) {
-        obj.fn();
-        return av.nodefault(e);
-      }
-    });
+
+    hotkeys.push(obj);
   };
 
   av.setHotkeyContext = function (context) {
     currentContext = context;
   };
-
 })();

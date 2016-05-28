@@ -139,6 +139,21 @@ var av = {
       }
     };
   },
+
+  //Show node A when node B is hovered
+  showOnHover: function(hover, show) {
+    av.on(hover, 'mouseover', function () {
+      av.style(show, {
+        opacity: 1
+      });
+    });
+
+    av.on(hover, 'mouseout', function () {
+      av.style(show, {
+        opacity: 0
+      });
+    });
+  },
   
   //Used in event handles to cancel default behaviour
   nodefault: function (e) {
@@ -321,9 +336,9 @@ var av = {
 
   av.log = function (level) {   
     if (level <= logLevel && level > 0) {
-      var args = Array.prototype.splice(arguments);
-      args.slice(0, 1);
-      console.log([av.timestamp(), '[almostvanilla]', logLevels[level - 1], '-'].concat(args));      
+      var args = Array.prototype.slice.call(arguments);
+      args.splice(0, 1);
+      console.log([av.timestamp(), '[almostvanilla]', logLevels[level - 1], '-'].concat(args).join(' '));      
     }
   }
   

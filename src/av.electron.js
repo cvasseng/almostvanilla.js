@@ -45,6 +45,7 @@ SOFTWARE.
 
   av.electron.ipc = {
     on: events.on,
+    next: events.next,
     emit: function () {
       var args = [
         'asynchronous-message'            

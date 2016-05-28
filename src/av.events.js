@@ -40,6 +40,10 @@ av.events = function () {
     if (listeners[which]) {
       listeners[which].forEach(function (listener) {
         listener.fn.apply(listener.ctx, args);
+
+        if (listener.once) {
+          listener.remove();
+        }
       });
     }
   }
@@ -55,7 +59,7 @@ av.events = function () {
   /*
     Returns a function that can be called to unbind the event
   */
-  function on(evnt, fn, ctx) {
+  function on(evnt, fn, ctx, once) {
     var id = (typeof uuid !== 'undefined') ? uuid.v4() : (++count),
         s = []
     ;
@@ -77,14 +81,25 @@ av.events = function () {
     listeners[evnt].push({
       id: id,
       fn: fn,
-      ctx: ctx
+      ctx: ctx,
+      once: once,
+      remove: remove
     });
 
-    return function () {
+    function remove () {
       listeners[evnt] = listeners[evnt].filter(function (b) {
         return b.id !== id;
       });
     };
+
+    return remove;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+  //Bind to next event only 
+
+  function next(evnt, ctx, fn) {
+    return on(evnt, ctx, fn, true);
   }
 
   //////////////////////////////////////////////////////////////////////////////
