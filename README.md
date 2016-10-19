@@ -7,10 +7,8 @@ nor IE 6/7/8. It is written in a functional manner with no prototype-based class
 augmentation of built-in objects. It does not offer any high-level UI functionality (e.g. widgets).
 
 #Building
- 
-To build almostvanilla.js, you need [bakor](https://github.com/iqumulus/bakor/) installed. Bakor is a node module, 
-and must be installed globally, i.e. `npm install -g bakor`.
-Once installed, build by running `bakor` in the project root directory.
+
+Run `npm install && node build`.
 
 This will produce a set of files in the `./build/` directory which can be included in your application.
  

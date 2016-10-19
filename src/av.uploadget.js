@@ -41,17 +41,21 @@ SOFTWARE.
     av.ap(document.body, uploader);    
   });
   
-  //Object is:
-  /*
-    {
-      type: json|text|b64|binary,
-      multiple: true|false,
-      progress: fn,
-      success: fn,
-      error: fn
-    }
-  
-  */  
+
+  /** Read a file on the host selected by the user.
+   *  @param props {object} - the settings
+   *    > type {type} - the type to parse as `json`, `text`, `b64`, or `binary`
+   *    > multiple {bool} - allow multiple selection
+   *    > progress {function} - function to call when there's progress on the upload
+   *      > percent {number} - the current progress in percent
+   *    > success {function} - the function to call when the file has been parsed
+   *      > {object} - file information
+   *        > filename {string} - the filename
+   *        > size {number} - the size of the file in bytes
+   *        > data {string} - the file contents
+   *    > error {function} - the function to call if an error occures
+   *      > {string} - the error message
+   */  
   av.readLocalFile = function (props) {
     var p = av.merge({
           type: 'text',

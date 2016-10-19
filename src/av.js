@@ -330,11 +330,13 @@ var av = {
       ] 
   ;    
 
+  /** Set the current log level
+   */
   av.setLogLevel = function (nlevel) {
     if (nlevel >= 0 && nlevel <= logLevel.length) {
       logLevel = nlevel - 1;
     }
-  }
+  };
 
   av.log = function (level) {   
     if (level <= logLevel && level > 0) {
@@ -342,7 +344,7 @@ var av = {
       args.splice(0, 1);
       console.log([av.timestamp(), '[almostvanilla]', logLevels[level - 1], '-'].concat(args).join(' '));      
     }
-  }
+  };
   
   av.ready = function (fn) {
     if (inited) {
@@ -356,7 +358,7 @@ var av = {
   
   function init() {
     if (window && window.document && window.document.body && !inited) {
-      console.log("[almostvanilla] Initializing..");
+      av.log("[almostvanilla] Initializing..");
       inited = true;
       readyFn = readyFn.filter(function (fn) {
         if (av.isFn(fn)) {
@@ -368,7 +370,7 @@ var av = {
       return true;
     }
     return false;
-  }
+  };
   
   //Start polling for initialization - not ideal, but proved most stable after multiple tests.
   poller = setInterval(function () {

@@ -31,11 +31,13 @@ SOFTWARE.
 
   ///////////////////////////////////////////////////////////////////////////
   
-  /** Make a node draggable
+  /** Make a node draggable   
    *
    *  @constructor
+   *
    *  @emits DragStart - when starting to drag
    *  @emits DragEnd - when done dragging
+   *
    *  @param target {domnode} - the domnode to make draggable
    *  @param type {string} - the type of payload
    *  @param payload {anything} - the actual payload

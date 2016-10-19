@@ -1,0 +1,8 @@
+{
+  "name": "almostvanilla.js",
+  "author": "Chris Vasseng <chris@tinkerer.xyz>",
+  "version": "0.0.2",
+  "dependencies": {
+    "uglify-js": "*"
+  }
+}

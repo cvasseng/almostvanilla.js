@@ -30,6 +30,24 @@ SOFTWARE.
  *
  *  Used to handle dispatching and listening to events
  * 
+ *  @example
+ *  function MyObject() {
+ *    var events = av.events();
+ *    return {
+ *      on: events.on,
+ *      emitHello: function () {
+ *        events.emit('Hello', 'Hello world!');
+ *      }
+ *    };     
+ *  }
+ *
+ *  var instance = MyObject();
+ *  instance.on('Hello', function (msg) {
+ *    alert(msg); 
+ *  });
+ *
+ *  instance.emitHello();
+ * 
  *  @constructor
  */ 
 av.events = function () {
@@ -64,7 +82,7 @@ av.events = function () {
 
   //////////////////////////////////////////////////////////////////////////////
   
-  /** Clear events
+  /** Clear all event listeners
    *  @memberof av.events
    */
   function clear() {

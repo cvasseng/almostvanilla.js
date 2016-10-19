@@ -1,0 +1,8 @@
+{
+  "output": "docs/",
+  "name": "almostvanilla.js",
+  "usePackage": true,
+  "sources": [
+    "src/"
+  ]
+}

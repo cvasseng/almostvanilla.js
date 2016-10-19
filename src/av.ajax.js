@@ -50,6 +50,7 @@ SOFTWARE.
  *   > dataType {string} - the expected return type (json, xml, text, octet)
  *   > data {anything} - the payload data
  *   > autoFire {boolean} - should we run the request right away?
+ *   > headers {object} - headers to send, e.g. `{'Content-Type': 'application/json'}
  *   > sucess {function} - the function to call on success
  *     > {anything} - the request result
  *   > error {function} - the function to call on error
@@ -68,7 +69,8 @@ av.ajax = function (p) {
         success: function () {},
         error: function () {},
         data: {},
-        autoFire: true
+        autoFire: true,
+        headers: {}
       }, p),
       headers = {
         json: 'application/json',
@@ -83,7 +85,14 @@ av.ajax = function (p) {
   if (!props.url) return false;
   
   r.open(props.type, props.url, true);
-  r.setRequestHeader('Content-Type', headers[props.dataType] || headers.text);
+
+  if (!props.headers['Content-Type']) {
+    r.setRequestHeader('Content-Type', headers[props.dataType] || headers.text);
+  }
+
+  Object.keys(props.headers).forEach(function (name) {
+    r.setRequestHeader(name, props.headers[name]);
+  });
 
   r.onreadystatechange = function () {
     events.emit('ReadyStateChange', r.readyState, r.status);
