@@ -26,6 +26,40 @@ SOFTWARE.
 
 ******************************************************************************/
 
+/** Perform an Ajax request
+ *
+ * Same syntax as jQuery, with the exception that requests can be 
+ * prepared and fired at a later time.
+ *
+ * @example 
+ * av.ajax({
+ *   url: 'http://google.com',
+ *   success: function (data) {
+ *       document.body.innerHTML = data; 
+ *   }
+ * });
+ *
+ * @emits OK - Emitted when the request suceeds
+ *   > {anything} - the request result
+ * @emits Error - Emitted when an error occures
+ *   > {string} - the error message
+ *
+ * @param p {object} - The settings for the request
+ *   > url {string} - the url
+ *   > type {string} - the request type (get, post, update, delete)
+ *   > dataType {string} - the expected return type (json, xml, text, octet)
+ *   > data {anything} - the payload data
+ *   > autoFire {boolean} - should we run the request right away?
+ *   > sucess {function} - the function to call on success
+ *     > {anything} - the request result
+ *   > error {function} - the function to call on error
+ *     > {string} - the error message
+ *
+ * @returns {object} - an interface to interact with the request
+ *   > on {function} - listen to an event
+ *   > fire {function} - perform the request
+ *   > request {XMLHttpRequest} - the request object
+ */
 av.ajax = function (p) {
   var props = av.merge({
         url: false,

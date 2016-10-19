@@ -30,7 +30,17 @@ SOFTWARE.
   var activePayload = false;
 
   ///////////////////////////////////////////////////////////////////////////
-  //Make a node draggable
+  
+  /** Make a node draggable
+   *
+   *  @constructor
+   *  @emits DragStart - when starting to drag
+   *  @emits DragEnd - when done dragging
+   *  @param target {domnode} - the domnode to make draggable
+   *  @param type {string} - the type of payload
+   *  @param payload {anything} - the actual payload
+   *
+   */
   av.Draggable = function(target, type, payload) {
     var events = av.events(),
         callbacks = []
@@ -56,13 +66,25 @@ SOFTWARE.
     }));
 
     return {
+      /** The DOM node we're attached to
+       *  @type {domnode}
+       */
       target: target,
       on: events.on
     }
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  //Turn a node into a drop target
+  
+  /** Turn a node into a drop target
+   *  @constructor
+   *  @emits DragEnter - when holding something over the target
+   *  @emits DragLeave - when leaving the target
+   *  @emits DragOver - when hovering something over thte target
+   *  @emits Drop - when dropping a valid payload on the target
+   *  @param target {domnode} - the dom node to turn into a drop target
+   *  @param types {string} - a set of types which the target accepts separated by whitespace
+   */
   av.DropTarget = function(target, types) {
     var enabled,
         events = av.events(),
@@ -109,14 +131,23 @@ SOFTWARE.
       }));
     }
 
+    /** Enable the target 
+     * @memberof av.DropTarget
+     */
     function enable() {
       enabled = true;
     }
 
+    /** Disable the target 
+     * @memberof av.DropTarget
+     */
     function disable() {
       enabled = false;
     }
 
+    /* Destroy the object
+     * @memberof av.DropTarget
+     */
     function destroy() {
       callbacks.forEach(function (fn) {
         fn();

@@ -26,13 +26,27 @@ SOFTWARE.
 
 ******************************************************************************/
  
+/** Event dispatcher
+ *
+ *  Used to handle dispatching and listening to events
+ * 
+ *  @constructor
+ */ 
 av.events = function () {
   var listeners = {},
       count = 0
   ;
 
   //////////////////////////////////////////////////////////////////////////////
-  //Emit an event
+  
+  /** Emit an event
+   *
+   *  This function accepts a variable number of arguments after the first
+   *  concrete one, which will all be delegated to the listeners.
+   *
+   *  @memberof av.events
+   *  @param which {string} - the event to dispatch
+   */
   function emit (which) {
     var args = Array.prototype.slice.call(arguments);
     args.splice(0, 1);
@@ -49,15 +63,24 @@ av.events = function () {
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  //Clear events
+  
+  /** Clear events
+   *  @memberof av.events
+   */
   function clear() {
     listeners = {};
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  //Bind 
-  /*
-    Returns a function that can be called to unbind the event
+
+  /** Listen to an event
+   *  Returns a function that can be called to unbind the event
+   *  @memberof av.events
+   *  @param evnt {string} - the event to listen for
+   *  @param fn {function} - the function to call when emitted
+   *  @param ctx {anything} - the calling context
+   *  @param once {bool} - set to true to only listen for the next emitted
+   *  @returns {function} - function that can be called to unbind the event
   */
   function on(evnt, fn, ctx, once) {
     var id = (typeof uuid !== 'undefined') ? uuid.v4() : (++count),

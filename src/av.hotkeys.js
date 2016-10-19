@@ -66,6 +66,12 @@ SOFTWARE.
      F5   
      etc.
   */
+
+  /** Register a new hotkey
+   *  @param key {string} - the key combo (e.g. "S", "CTRL+S" etc)
+   *  @context {string} - the context in which the hotkey is active
+   *  @fn {function} - the function to call when the hotkey is activated
+   */
   av.registerHotkey = function (key, context, fn) {
     var pa = key.toUpperCase().split('+'),
         obj = {}
@@ -96,6 +102,9 @@ SOFTWARE.
     hotkeys.push(obj);
   };
 
+  /** Set the current hotkey context
+   *  @param context {string} - the new context
+   */
   av.setHotkeyContext = function (context) {
     currentContext = context;
   };

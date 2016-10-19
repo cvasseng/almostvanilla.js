@@ -44,8 +44,15 @@ SOFTWARE.
   av.electron = av.ectron || {};
 
   av.electron.ipc = {
+    /** Listen to an electron IPC message
+     *  @type function
+     *  @namespace av.electron.ipc
+     */
     on: events.on,
     next: events.next,
+    /** Emit an electron IPC message
+     *  @namespace av.electron.ipc
+     */
     emit: function () {
       var args = [
         'asynchronous-message'            

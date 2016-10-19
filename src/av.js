@@ -28,7 +28,9 @@ SOFTWARE.
 
 var av = {
   
-  //Append nodes to a target
+  /** Append nodes to a target
+   *  @namespace av
+   */
   ap: function (target) {
     var args = Array.prototype.slice.call(arguments);
     args.splice(0, 1);
